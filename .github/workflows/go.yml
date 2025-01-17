@@ -43,10 +43,14 @@ jobs:
 
     steps:
       - name: Download artifact
+        id: download_artifact
         uses: actions/download-artifact@v4
         with:
           name: SimpleHttpServerInGO_binaries
       
+      - name: display
+        run: ls -lha
+        
       - name: Create release
         id: create_release
         env:
@@ -57,12 +61,13 @@ jobs:
             --repo="$GITHUB_REPOSITORY" \
             --title="${tag#v}" \
             --generate-notes
-      
+
       - name: Release artifact
         env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             tag: ${{ github.ref_name }}
-        run: >-
-          gh release upload ${{ github.ref_name }}  SimpleHttpServerInGO_binaries.zip
+        run: |
+          ls -lha \
+          gh release upload "$tag" ${{ steps.download_artifact.outputs }}
 
 
