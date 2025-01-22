@@ -2,23 +2,21 @@
 
 A very simple HTTP server in [GO](https://go.dev/) for network routing tests.
 
-When I created this program, I couldn't use Python and if you arrived here because of the [code snippet](#python-simple-http-server), use it.
-
-The program will only return a HTTP 200 response code with some output for "debug".
-
 The intent is to help infrastructure teams on test the network routing configurations without the need of complex services or install Python on the target server.
+
+It will only return a HTTP 200 response code with some output for "debug".
 
 ## Using
 
 This section will assume that you are using bash on a linux/unix distribution.
 
-To start the server on 8080 port:
+To start listening on 8080 port:
 
 ```sh
 ./SimpleHttpServerInGO_x86_lin
 ```
 
-To choose a different port:
+To listen, for example, on 8088 port, do:
 
 ```sh
 ./SimpleHttpServerInGO_x86_lin 8088
@@ -48,7 +46,9 @@ cURL:
 When a request reach the program this generates a "log" as bellow:
 
 ```
+2025/01/17 18:14:38 --------------------------------------------------------------------------------
 2025/01/17 18:14:38 URI      | Origin IP       | Remote Address  | HTTP Request Headers
+2025/01/17 18:14:38 --------------------------------------------------------------------------------
 2025/01/17 18:14:43 /        | 127.0.0.1       | 127.0.0.1       | [User-Agent: curl/8.7.1] [Accept: */*]
 2025/01/17 18:14:45 /hello   | 127.0.0.1       | 127.0.0.1       | [Accept: */*] [User-Agent: curl/8.7.1]
 2025/01/17 18:14:47 /headers | 127.0.0.1       | 127.0.0.1       | [User-Agent: curl/8.7.1] [Accept: */*]
@@ -86,6 +86,8 @@ The lack of comments on te code will be addressed on a later date. Contributions
 
 ## Python simple HTTP server
 
+If you arrived here because of the code snippet, use it.
+
 If you have Python available on your environment you can start a simple HTTP server with the command:
 
 Python 3:
@@ -98,8 +100,8 @@ Python 2:
 python -m SimpleHTTPServer 8080
 ```
 
-If you arrived here because of the code snippet, use it.
-
 ## Conclusion
+
+When this program was created, I couldn't use Python and need of something that had no dependencies, was "small" and when the tests ended was easy to "uninstall".
 
 Hope this helps.

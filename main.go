@@ -26,11 +26,17 @@ func requestOrigin(req *http.Request) {
 			f = false
 		}
 	}
-	var remoteAddr = strings.Split(req.RemoteAddr, ":")[0]
+
+	remoteAddr, _, _ := net.SplitHostPort(req.RemoteAddr)
 	var originIP string = remoteAddr
 
-	if len(req.Header.Get("X-Forwarded-For")) > 0 {
-		originIP = strings.Split(req.Header.Get("X-Forwarded-For"), ":")[0]
+	for _, h := range []string{"X-Forwarded-For", "X-Real-Ip"} {
+		for _, ip := range strings.Split(req.Header.Get(h), ",") {
+			realIP := net.ParseIP(strings.Replace(ip, " ", "", -1))
+			if realIP != nil {
+				originIP = realIP.String()
+			}
+		}
 	}
 
 	log.Printf("%-8s | %-15s | %-15s | %s",
@@ -103,7 +109,9 @@ func main() {
 	fmt.Printf("  curl -v http://%s:%s/headers\n", ips[0], port)
 	fmt.Printf("\n")
 
+	log.Println(strings.Repeat("-", 80))
 	log.Println("URI      | Origin IP       | Remote Address  | HTTP Request Headers")
+	log.Println(strings.Repeat("-", 80))
 
 	port = ":" + port
 
